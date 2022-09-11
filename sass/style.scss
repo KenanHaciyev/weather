@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
+
+* {
+    font-family: 'Roboto', sans-serif;
+    box-sizing: border-box;
+}
+
+.container {
+    padding: 0 calc(50% - 590px);
+    margin: 0 auto;
+}
+
+.show {
+    display: block
+}
+
+.hide {
+    display: none
+}
+
+@import 'blocks/header';
+@import 'blocks/weather';

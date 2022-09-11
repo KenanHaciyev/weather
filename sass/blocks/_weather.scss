@@ -1,0 +1,46 @@
+.weather {
+    &__forecast {
+        position: relative;
+    }
+    &__tabs {
+        list-style-type: none;
+        display: flex;
+        margin-bottom: 0;
+        padding: 0;
+        &-tab {
+            height: 160px;
+            width: 100px;
+            border: 1px solid black;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        &-active{
+            display: block;
+            position: relative;
+            &::after {
+                content: '';
+                position: absolute;
+                bottom: 1px;
+                width: 100%;
+                height: 10px;
+                background-color:#fff;
+                z-index: 1;
+
+            }
+        }
+    }
+
+    &__content {
+        width: 700px;
+        height: 500px;
+        border: 1px solid black;
+        display: none;
+        border-radius: 7px;
+        &-active {
+            background-color: #fff;
+            display: block;
+            position: absolute;
+            top: 150px;
+        }
+    }
+}
