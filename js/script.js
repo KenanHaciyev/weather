@@ -1,86 +1,67 @@
-window.addEventListener('DOMContentLoaded', () => {
+'use strict';
+   class WeatherWidget {
+        renderer;
+        list = [];
+        date = ''
+        title = 'Прогноз погоды на:'
+        constructor (rootElement, list) {
+            this.list = list;
+            this.renderer = new WeatherRender(rootElement)
+            this.renderer.render(this.list, this.title)
+        }
 
-    // const options = {
-    //     method: 'GET',
-    //     headers: {
-    //         'X-RapidAPI-Key': '27af6abcbfmshb18358048520597p18cc3ajsn4848468e1a72',
-    //         'X-RapidAPI-Host': 'weatherbit-v1-mashape.p.rapidapi.com'
-    //     }
-    // };
-    
-    // fetch('https://weatherbit-v1-mashape.p.rapidapi.com/forecast/3hourly?lat=40.3777&lon=49.892', options)
-    //     .then(response => response.json())
-    //     .then(response => console.log(response))
-    //     .catch(err => console.error(err));
+        addWeatherOfDay(day) {
+            this.list = [...this.list, day]
+            return this.renderer.render(this.list, this.title)
+        }
 
-    // //tabs
+        deleteDay(day) {
+            this.list = list.filter(item => item.id !== day.id);
+            list = this.list;
+            this.renderer.render(this.list, this.title)
+        }
 
-    // const tabs = document.querySelectorAll('.weather__tabs-tab'),
-    //       tabsContent = document.querySelectorAll('.weather__content'),
-    //       tabsParent = document.querySelector('.weather__tabs');
+        sortingbyTemp(a=1) {
+            let res;
+            if (a===0) {
+                res =  this.list.sort((a,b) => +a.temp < +b.temp ? 1 : -1);
+            }else {
+                res =  this.list.sort((a,b) => +a.temp > +b.temp ? 1 : -1);
+            }
+            return res;
+        }
 
-    // function hideContent() {
-    //     tabs.forEach(item => {
-    //         item.classList.remove('weather__tabs-active');
-    //     });
+        copyList(a='weekdays') {
+            let res;
+            if (a === 'weekend') {
+                res = list.filter(item => item.day ==='Суббота' || item.day ==='Воскр');
+            }else {
+                res = list.filter(item => item.day !=='Суббота' && item.day !=='Воскр');
+            }
+            return res;
+        }
+   }
 
-    //     tabsContent.forEach(item => {
-    //         item.classList.remove('weather__content-active');
-    //     });
-    // }
-
-    // function showContent(i=0) {
-    //     tabs[i].classList.add('weather__tabs-active');
-    //     tabsContent[i].classList.add('weather__content-active');
-    // }
-
-    // hideContent();
-    // showContent();
-
-    // tabsParent.addEventListener('click', (e) => {
-    //     const target = e.target;
-
-    //     if (e.target.classList.contains('weather__tabs-tab')) {
-    //         tabs.forEach((item,i) => {
-    //             if (item == target) {
-    //                 hideContent();
-    //                 showContent(i);
-    //             }
-    //         });
-    //     }
-    // });
-
-        
-    let view = [];
-    let id = 0;
     class Weather {
-        constructor(date, temp) {
-            this.date = date;
+        constructor(id, date, temp) {
             this.id = id;
+            this.date = date;
             this.temp = temp;
-            this.obj = {
-                id: this.id,
-                date: this.dateBinding(),
-                day: this.dayBinding(),
-                temp: this.temp,
+            this.day = this.dayBinding();
+        }
 
-            };
-            view.push(this.obj);
-            id++;
-        }          
-        
         dateBinding () {
             return new Date(this.date).toLocaleDateString();
         }
-        
+
         dayBinding() {
             let dateNum = new Date(this.date);
                 let obj =  {
                     weekDay: (() => {
                         let dayId = dateNum.getDay();
                         let day = new Map();
-                        day.set(0,'Воскресение');
-                        day.set(1,'Понедельник');
+                        day.set(0,'Воскр');
+                        day.set(1,'Понед');
                         day.set(2,'Вторник');
                         day.set(3,'Среда');
                         day.set(4,'Четверг');
@@ -91,74 +72,102 @@ window.addEventListener('DOMContentLoaded', () => {
                 };
             return obj.weekDay;
         }
-
-        deleteDay() {
-            return view = view.filter(item => item.id !== this.id);
-        }
-
-        sortingbyTemp(a=1) {
-            let res;
-            if (a===0) {
-                res =  view.sort((a,b) => +a.temp < +b.temp ? 1 : -1);
-            }else {
-                res =  view.sort((a,b) => +a.temp > +b.temp ? 1 : -1);
-            }
-            return res;
-        }
-
-        copyList(a='weekdays') {
-            let res;
-            if (a === 'weekend') {
-                res = view.filter(item => item.day ==='Суббота' || item.day ==='Воскресение');
-            }else {
-                res = view.filter(item => item.day !=='Суббота' && item.day !=='Воскресение');
-            }
-            return console.log(res);
+        
+    }
+    class WeatherDetailed extends Weather{
+        constructor(id, date, temp,windSpeed) {
+            super(id, date, temp);
+            this.windSpeed = windSpeed;         //добавление скорости ветра
         }
     }
 
-        const day1 = new Weather('2011-06-02', '-12');
-        const day2 = new Weather('2011-06-03', '-15');
-        const day3 = new Weather('2011-06-04', '-11');
-        const day4 = new Weather('2011-06-05', '-18');
-        const day5 = new Weather('2011-06-06', '+26');
-        const day6 = new Weather('2011-06-07', '+4');
-        const day7 = new Weather('2011-06-08', '+31');
+    const day1 = new Weather(1,'2011-06-02', '-12');
+    const day2 = new Weather(2,'2011-06-03', '-15');
+    const day3 = new Weather(3,'2011-06-04', '-11');
+    const day4 = new Weather(4,'2011-06-05', '-18');
+    const day5 = new Weather(5,'2011-06-06', '+26');
+    const day6 = new Weather(6,'2011-06-07', '+4');
+    const day7 = new Weather(7,'2011-06-08', '+31');
+
+    const day8 = new WeatherDetailed(8, '2011-08-09', '-2', 13);
+
+    let list = [day1, day2, day3, day4, day5, day6, day7, day8];
+
+class WeatherRender{
+    rootElement;
+    weatherElement;
+    constructor(rootElement) {
+        this.rootElement = rootElement
+    }
+    render(daysList, title) {
+        this.rootElement.innerHTML = ''
+        this.weatherElement = document.createElement('h3')
+        this.weatherElement.classList.add('weather')
     
-    console.log(view);  // Полный список
-
-
-    day3.deleteDay();   //Вызов метода deleteDay() того объекта класса, который вы хотите удалить
-    console.log(view);
-
-
-    //для сортировки от большей temp к меньшей введите аргумент 0
-    day2.sortingbyTemp(); // Сортировка по температуре
-    console.log(view);
-
-
-    //для выведения копии списка выходных введите аргумент "weekend"
-    day3.copyList();
-
-
-    class WeatherToday extends Weather{
-        constructor (date, temp) {
-            super(date, temp);
-        }
-
-        dateBinding() {
-            let dateNum = new Date(this.date);
-            return dateNum.toDateString();         //вывод даты в другом формате
-        }
+        this.weatherElement.appendChild(this.getWeatherTitleElement(title))
+        this.weatherElement.appendChild(this.getWeatherList(daysList))
+        this.rootElement.appendChild(this.weatherElement)
     }
 
-    let today = new WeatherToday( '2021-08-12','+13','http://path' );
-    let today2 = new WeatherToday( '2021-08-19','+15','http://path' );
+    update() {
+        return this.weatherElement.innerHTML = this.title;
+    }
 
-    console.log(view);
+    getWeatherTitleElement(title) {
+        return this.createElement('div', 'weather__title', title)
+    }
 
-});
+    getWeatherList(daysList) {
+        const weatherListElement = this.createElement('div', 'weather__list')
+            weatherListElement.appendChild(this.getWeatherElement(`${daysList.id}) ${daysList.date}`))
+            weatherListElement.appendChild(this.getWeatherElement(daysList.day))
+            weatherListElement.appendChild(this.getWeatherElement(daysList.temp))
+        return weatherListElement
+    }
 
+    getWeatherElement(day) {
+        return this.createElement('div', 'weather__list-element', day)
+    }
+
+    createElement(tagName, classes, html) {
+        const element = document.createElement(tagName)
+        element.classList.add(classes)
+        if (Boolean(html)) {
+            element.innerHTML = html
+        }
+        return element
+    }
+}
+    let i = 0
+    function createNewElement(num) {
+        i++
+        parent = document.querySelector('.app')
+        const elem = document.createElement('div')
+        elem.classList.add(`app__weather${i}`)
+        parent.appendChild(elem)
+        const weatherWidget = new WeatherWidget(document.querySelector(`.app__weather${i}`), list[num])
+        return weatherWidget;
+    }
+    
+    function callElements() {
+        for (let i = 0; i < list.length; i++) {
+            createNewElement(i)
+        }
+    };
+
+    const day9 = new Weather(9, '2011-06-10', '-10')
+    
+    setTimeout(() => {
+        list.push(day9)
+        createNewElement(i)
+    }, 2000)
+
+    callElements()
+
+
+    
+    
+    
 
 
 
