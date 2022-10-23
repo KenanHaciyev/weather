@@ -1,71 +1,81 @@
 'use strict'
 class WeatherRender{
-    rootElement;
-    weatherElement;
-    constructor(rootElement) {
-        this.rootElement = rootElement
-    }
-    render(daysList, title) {
-        this.rootElement.innerHTML = ''
-        if (daysList.length < 1) {
-            return
-        }
-        this.weatherElement = document.createElement('h3')
-        this.weatherElement.classList.add('weather')
+
+    div;    
     
-        this.weatherElement.appendChild(this.getWeatherTitleElement(title))
-        this.weatherElement.appendChild(this.getWeatherList(daysList))
-        this.rootElement.appendChild(this.weatherElement)
-
-
-        // this.creatingElems('div', 'weather', '.app')
+    async create (i) {
+        const res = await new Weatherdataservices().getData()
+        return await Promise.resolve(res)
     }
 
-    update() {
-        return this.weatherElement.innerHTML = this.title;
+    async initializationOfDays(i) {
+        const response = await this.create(i)
+        this.div = this.createElement('div', `weather__weekDays-${i}`,'.weather__weekDays')
+        this.div.classList.add('item')
+        this.div.setAttribute('data-id', i)
+        const img = await this.createElement('img', `weather__weekDays-${i}-img`,`.weather__weekDays-${i}`, '', `https:${response[i].imagePath}`)
+        const weekDay = await this.createElement('div', `weather__weekDays-day`,`.weather__weekDays-${i}`, response[i].dayOfWeek.slice(0,3))
+        const temp = await this.createElement('div', `weather__weekDays-temp`,`.weather__weekDays-${i}`, (response[i].tempC > 0? `+${Math.round(response[i].tempC)}°C` : `${Math.round(response[i].tempC)}°С`))
+        return Promise.resolve([this.div, response[i].dayOfWeek, response[i].imagePath, response[i].tempC, response[i].sunrise, response[i].sunset, response[i].date, response[i].text, response[i].humidity, response[i].pressure_mb])
     }
 
-    getWeatherTitleElement(title) {
-        return this.createElement('div', 'weather__title', title)
+    setDayOfWeek(date) {
+        const newDate = new Date(date).getDay()
+        const day = new Map()
+        day.set(0, 'Sunday')
+        day.set(1, 'Monday')
+        day.set(2, 'Tuesday')
+        day.set(3, 'Wednesday')
+        day.set(4, 'Thursday')
+        day.set(5, 'Friday')
+        day.set(6, 'Saturday')
+        return day.get(newDate)
     }
 
-    getWeatherList(daysList) {
-        const weatherListElement = this.createElement('div', 'weather__list')
-            daysList.forEach(item => {
-                weatherListElement.appendChild(this.getWeatherElement(`${item.id}) ${item.date}`))
-                weatherListElement.appendChild(this.getWeatherElement(item.day))
-                weatherListElement.appendChild(this.getWeatherElement(item.temp))
-                weatherListElement.appendChild(this.getWeatherElement(deleting, item.id))
+    createElement(tag, className, parent, inner, path) {
+        const elem = document.createElement(tag);
+        elem.classList.add(className);
+        const parentNode = document.querySelector(parent);
+        if (inner) {
+            elem.innerHTML = inner
+        }
+
+        if (path) {
+            elem.setAttribute('src', path)
+        }
+        parentNode.appendChild(elem)
+        return elem
+    }
+
+    async asyncCreatingOfDays () {
+        const daysDataInformation  = []
+        for (let i = 0; i < 7; i++) {
+           const oneDay = await this.initializationOfDays(i)
+           daysDataInformation.push(oneDay)
+        }
+        return daysDataInformation
+    }
+
+    async pressBtn() {
+        const response = await this.asyncCreatingOfDays()
+            response.map((item, i) => {
+                item[0].addEventListener('click', () => {
+                    response.map(itemDeleteActive => itemDeleteActive[0].classList.remove('active'))
+                    response[i][0].classList.add('active')
+                    document.querySelector('.weather__leftWrapper-day').textContent = item[1]
+                    document.querySelector('.weather__rightWrapper-img').setAttribute('src', `https:${item[2]}`)
+                    document.querySelector('.weather__headerWrapper-temp').textContent = item[3] > 0 ?  `+${Math.round(item[3])}°C` : `${Math.round(item[3])}°C`
+                    document.querySelector('.weather__leftWrapper-sunrise').textContent = item[4]
+                    document.querySelector('.weather__leftWrapper-sunset').textContent = item[5]
+                    document.querySelector('.weather__leftWrapper-date').textContent = new Date(item[6]).toLocaleDateString()
+                    document.querySelector('.weather__leftWrapper-descr').textContent = item[7]
+                    document.querySelector('.weather__leftWrapper-humidity').textContent = `${item[8]} %`
+                    document.querySelector('.weather__leftWrapper-tension').textContent = `${item[9]} hPa`
+                })
             })
-        return weatherListElement
     }
-
-    getWeatherElement(day, id) {
-        const elem =  this.createElement('div', 'weather__list-element', day)
-            elem.setAttribute('data-id', id)
-        return elem
-    }
-
-    createElement(tagName, classes, html) {
-        const element = document.createElement(tagName)
-        element.classList.add(classes)
-        if (Boolean(html)) {
-            if (html === deleting) {
-                element.classList.add('forDelete')
-            }
-            element.innerHTML = html
-        }
-        return element
-    }
-    
-    creatingElems(tagName, classname, placeName) {
-        const elem = document.createElement(tagName)
-        elem.classList.add(classname)
-        const parent = document.querySelector(placeName)
-        parent.appendChild(elem)
-        return elem
-    }
-
-    
-
 }
+
+
+
+

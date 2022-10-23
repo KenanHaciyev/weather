@@ -1,38 +1,45 @@
 
+// My Api for generation new key https://www.weatherapi.com/
 'use strict';
-    const deleting = 'Удалить'
-    const day1 = new Weather(1,'2011-06-02', '-12');
-    const day2 = new Weather(2,'2011-06-03', '-15');
-    // const day3 = new Weather(3,'2011-06-04', '-11');
-    // const day4 = new Weather(4,'2011-06-05', '-18');
+    const weatherRenderer = new WeatherRender
     
-    let title = 'Прогноз погоды на:'
-    let index = 2
-    function create(id, date, temp) {
-        index++
-        parent = document.querySelector('.app')
-        const day = new Weather(id, date, temp)
-        let list = [day]
-        const HTMLElement = document.createElement('div')
-        HTMLElement.classList.add(`app__weather${index}`)
-        parent.appendChild(HTMLElement)
-        let listWidget = new WeatherComponent(document.querySelector(`.app__weather${index}`), list, title)
-        return listWidget
-    }
-    create(3, '2020-02-31', '+44')
-
-    let list = [day1];
-    let list2 = [day2];
-
-    const list1Root = document.querySelector('.app__weather1')
-    const list2Root = document.querySelector('.app__weather2')
-
-    const list1Widget = new WeatherComponent(list1Root, list, title)
-    const list2Widget = new WeatherComponent(list2Root, list2, title)
-
-    const day9 = new Weather(5, '2011-06-10', '-10')
-
-
+    const appContainer = new HTMLElement('div', 'container', '.app').createHTMLElement()
+    const weather = new HTMLElement('div', 'weather', '.container').createHTMLElement()
+    const weatherHeader = new HTMLElement('div', 'weather__headerWrapper', '.weather').createHTMLElement()
+    const weatherTitle = new HTMLElement('h1', 'weather__headerWrapper-title', '.weather__headerWrapper', 'Baku').createHTMLElement()
+    const weatherTemp = new HTMLElement('div', 'weather__headerWrapper-temp', '.weather__headerWrapper').createHTMLElement()
+    const weatherContent = new HTMLElement ('div', 'weather__content', '.weather').createHTMLElement()
+    const weatherLeft = new HTMLElement('div', 'weather__leftWrapper', '.weather__content').createHTMLElement()
+    const weatherDay = new HTMLElement('div', 'weather__leftWrapper-day', '.weather__leftWrapper').createHTMLElement()
+    const weatherDate = new HTMLElement('div', 'weather__leftWrapper-date', '.weather__leftWrapper').createHTMLElement()
+    const weatherTime = new HTMLElement('div', 'weather__leftWrapper-time', '.weather__leftWrapper', `${new Date().toLocaleTimeString()}`).createHTMLElement()
+    const weatherDescription = new HTMLElement('div', 'weather__leftWrapper-descr','.weather__leftWrapper').createHTMLElement()
+    const weatherRowWrapper1 = new HTMLElement('div', 'weather__leftWrapper-row1', '.weather__leftWrapper').createHTMLElement()
+    const weatherHumidityImg = new HTMLElement('img', 'weather__leftWrapper-row1-img', '.weather__leftWrapper-row1', '', './image/humidity.png').createHTMLElement()
+    const weatherHumidity = new HTMLElement('div', 'weather__leftWrapper-humidity', '.weather__leftWrapper-row1').createHTMLElement()
+    const weatherRowWrapper2 = new HTMLElement('div', 'weather__leftWrapper-row2', '.weather__leftWrapper').createHTMLElement()
+    const weatherTensionImg = new HTMLElement('img', 'weather__leftWrapper-row2-img', '.weather__leftWrapper-row2', '', './image/tension.png').createHTMLElement()
+    const weatherTension = new HTMLElement('div', 'weather__leftWrapper-tension', '.weather__leftWrapper-row2').createHTMLElement()
+    const weatherRowWrapper3 = new HTMLElement('div', 'weather__leftWrapper-row3', '.weather__leftWrapper').createHTMLElement()
+    const weatherSunriseImg = new HTMLElement('img', 'weather__leftWrapper-row3-img', '.weather__leftWrapper-row3', '', './image/sunrise.png').createHTMLElement()
+    const weatherSunrise = new HTMLElement('div', 'weather__leftWrapper-sunrise', '.weather__leftWrapper-row3').createHTMLElement()
+    const weatherRowWrapper4 = new HTMLElement('div', 'weather__leftWrapper-row4', '.weather__leftWrapper').createHTMLElement()
+    const weatherSunsetImg = new HTMLElement('img', 'weather__leftWrapper-row4-img', '.weather__leftWrapper-row4', '', './image/sunset.png').createHTMLElement()
+    const weatherSunset =new HTMLElement('div', 'weather__leftWrapper-sunset', '.weather__leftWrapper-row4').createHTMLElement()
+    const weatherRight = new HTMLElement('div', 'weather__rightWrapper', '.weather__content').createHTMLElement()
+    const weatherImg = new HTMLElement('img', 'weather__rightWrapper-img', '.weather__rightWrapper').createHTMLElement()
+    const weatherWeek = new HTMLElement('div', 'weather__weekDays', '.weather').createHTMLElement();
+    
+    (async() => {
+       await weatherRenderer.pressBtn();
+       document.querySelector('.weather__weekDays-0').click()
+    })()
+    
+    setInterval(() => {
+        document.querySelector('.weather__leftWrapper-time').textContent = new Date().toLocaleTimeString()
+    }, 1000)
+    
+    
 
 
 
