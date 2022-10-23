@@ -1,7 +1,7 @@
 'use strict'
-class WeatherRender{
+class WeatherCreating{
 
-    div;    
+    div;
     
     async create (i) {
         const res = await new Weatherdataservices().getData()

@@ -6,7 +6,7 @@ class Weatherdataservices {
         const weatherByDay = response_1.forecast.forecastday.map((item) => {
             return new WeatherDetailed(
                 item.day.condition.icon,
-                new WeatherRender().setDayOfWeek(item.date_epoch * 1000),
+                new WeatherCreating().setDayOfWeek(item.date_epoch * 1000),
                 item.day.avgtemp_c,
                 item.astro.sunrise,
                 item.astro.sunset,
