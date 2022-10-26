@@ -1,6 +1,14 @@
-class WeatherDetailed extends Weather{
+import { Weather } from "./weather"
+export class WeatherDetailed extends Weather{
     
-    constructor(imagePath, dayOfWeek, tempC, sunrise, sunset, date, humidity, text, pressure_mb) {
+    _sunrise
+    _sunset
+    _date
+    _humidity
+    _text
+    _pressure_mb
+
+    constructor(imagePath: string, dayOfWeek : string, tempC : string, sunrise:string, sunset:string, date:number, humidity:string, text:string, pressure_mb:string) {
         super(imagePath, dayOfWeek, tempC)
         this._sunrise = sunrise
         this._sunset = sunset

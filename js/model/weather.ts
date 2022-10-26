@@ -1,6 +1,8 @@
-class Weather {
-
-    constructor(imagePath, dayOfWeek, tempC) {
+export class Weather {
+    imagePath
+    _dayOfWeek
+    _tempC
+    constructor(imagePath:string, dayOfWeek:any, tempC:string) {
         this.imagePath = imagePath
         this._dayOfWeek = dayOfWeek
         this._tempC = tempC

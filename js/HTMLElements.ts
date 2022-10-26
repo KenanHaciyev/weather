@@ -1,6 +1,12 @@
-class HTMLElement {
+export class HTMLElements {
 
-    constructor(tag, className, parent, inner, path) {
+    tag: string
+    className:string
+    parent:string
+    inner:string
+    path: string
+
+    constructor(tag: string, className: string, parent: string, inner?: string, path?: string) {
         this.tag = tag
         this.className = className
         this.parent = parent
@@ -8,7 +14,7 @@ class HTMLElement {
         this.path = path
     }
     
-    createHTMLElement() {
+    createHTMLElement() : any {
         const elem = document.createElement(this.tag);
         elem.classList.add(this.className);
         const parentNode = document.querySelector(this.parent);

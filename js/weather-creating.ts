@@ -1,14 +1,17 @@
 'use strict'
-class WeatherCreating{
 
-    div;
+import { Weatherdataservices } from "./weather.data.service";
+
+export class WeatherCreating{
+
+    div:any;
     
-    async create (i) {
+    async create (i:number): Promise<any> {
         const res = await new Weatherdataservices().getData()
         return await Promise.resolve(res)
     }
 
-    async initializationOfDays(i) {
+    async initializationOfDays(i:number) : Promise<any> {
         const response = await this.create(i)
         this.div = this.createElement('div', `weather__weekDays-${i}`,'.weather__weekDays')
         this.div.classList.add('item')
@@ -19,7 +22,7 @@ class WeatherCreating{
         return Promise.resolve([this.div, response[i].dayOfWeek, response[i].imagePath, response[i].tempC, response[i].sunrise, response[i].sunset, response[i].date, response[i].text, response[i].humidity, response[i].pressure_mb])
     }
 
-    setDayOfWeek(date) {
+    setDayOfWeek(date:number):string {
         const newDate = new Date(date).getDay()
         const day = new Map()
         day.set(0, 'Sunday')
@@ -32,7 +35,7 @@ class WeatherCreating{
         return day.get(newDate)
     }
 
-    createElement(tag, className, parent, inner, path) {
+    createElement(tag:string, className:string, parent:string, inner?:string, path?:string):any {
         const elem = document.createElement(tag);
         elem.classList.add(className);
         const parentNode = document.querySelector(parent);
@@ -47,7 +50,7 @@ class WeatherCreating{
         return elem
     }
 
-    async asyncCreatingOfDays () {
+    async asyncCreatingOfDays () : Promise<any> {
         const daysDataInformation  = []
         for (let i = 0; i < 7; i++) {
            const oneDay = await this.initializationOfDays(i)
@@ -56,11 +59,11 @@ class WeatherCreating{
         return daysDataInformation
     }
 
-    async pressBtn() {
+    async pressBtn(): Promise<void> {
         const response = await this.asyncCreatingOfDays()
-            response.map((item, i) => {
+            response.map((item:any, i:number) => {
                 item[0].addEventListener('click', () => {
-                    response.map(itemDeleteActive => itemDeleteActive[0].classList.remove('active'))
+                    response.map((itemDeleteActive:any) => itemDeleteActive[0].classList.remove('active'))
                     response[i][0].classList.add('active')
                     document.querySelector('.weather__leftWrapper-day').textContent = item[1]
                     document.querySelector('.weather__rightWrapper-img').setAttribute('src', `https:${item[2]}`)
@@ -75,6 +78,10 @@ class WeatherCreating{
             })
     }
 }
+
+
+
+
 
 
 
